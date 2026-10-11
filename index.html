@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0c1b1b" />
+    <meta name="description" content="Learn guitar chords, explore classic chord progressions, and practice with a built-in strummer and metronome. Free, no account required." />
+    <title>Fretwise — Your guitar practice space</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <a href="#home" class="brand" aria-label="Fretwise home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 44 44" fill="none"><path d="M12 7v30M22 7v30M32 7v30M7 15h30M7 25h30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="15" r="5" fill="#c6ff70" stroke="#0c1b1b" stroke-width="2"/><circle cx="12" cy="25" r="4" fill="#c6ff70" stroke="#0c1b1b" stroke-width="2"/></svg>
+          </span>
+          <span class="brand-word">fret<span>wise</span><small>THE GUITAR PRACTICE SPACE</small></span>
+        </a>
+        <div class="header-meta"><span class="live-dot"></span> LEARN AT YOUR OWN PACE <span class="header-slash">/</span> STANDARD TUNING</div>
+      </header>
+
+      <section class="hero" id="home" aria-labelledby="hero-heading">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> THE GOOD KIND OF PRACTICE</div>
+          <h1 id="hero-heading">Find your sound.<br/><em>One chord at a time.</em></h1>
+          <p>Get the shapes under your fingers, discover progressions that actually sound like songs, and build your rhythm.</p>
+          <div class="hero-actions">
+            <button type="button" class="button button-lime" id="hero-chords">Explore chords <span aria-hidden="true">↗</span></button>
+            <button type="button" class="button button-outline" id="hero-progressions">Practice progressions <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="hero-art-label">THE FOUR-CHORD LOOP <span>01 / 04</span></div>
+          <div class="hero-chord-track">
+            <div class="hero-chord hero-chord-active"><span>01</span><strong>C</strong><small>I</small></div>
+            <div class="hero-chord"><span>02</span><strong>G</strong><small>V</small></div>
+            <div class="hero-chord"><span>03</span><strong>Am</strong><small>vi</small></div>
+            <div class="hero-chord"><span>04</span><strong>F</strong><small>IV</small></div>
+          </div>
+          <div class="hero-art-footer"><span class="mini-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span> <span>GET A FEEL FOR IT</span></div>
+        </div>
+      </section>
+
+      <main id="main" class="app-main">
+        <div class="section-topline"><span>YOUR WORKSPACE</span><span>01 — 02</span></div>
+        <div class="main-title-row">
+          <div><h2>Pick up. Tune in. <span>Play.</span></h2><p>Two places to start. There's no wrong one.</p></div>
+          <div class="tuning-pill"><span class="tuning-led"></span><div><small>TUNING</small><strong>E · A · D · G · B · e</strong></div></div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Learning sections">
+          <button type="button" class="tab active" id="tab-chords" role="tab" aria-selected="true" aria-controls="panel-chords"><span class="tab-index">01</span> Chord library <span class="tab-arrow" aria-hidden="true">↗</span></button>
+          <button type="button" class="tab" id="tab-progressions" role="tab" aria-selected="false" aria-controls="panel-progressions" tabindex="-1"><span class="tab-index">02</span> Chord progressions <span class="tab-arrow" aria-hidden="true">↗</span></button>
+        </div>
+
+        <section class="tab-panel" id="panel-chords" role="tabpanel" aria-labelledby="tab-chords">
+          <div class="panel-intro">
+            <div><span class="section-kicker">THE SHAPES</span><h3>Chord library<span class="title-period">.</span></h3><p>Find a chord, see where your fingers go, and hear how it sounds.</p></div>
+            <div class="count-chip"><strong id="chord-count">96</strong><span>CHORDS TO EXPLORE</span></div>
+          </div>
+          <div class="explorer-layout">
+            <div class="library-column">
+              <div class="filter-panel">
+                <label class="control-label" for="chord-search">FIND YOUR CHORD</label>
+                <div class="search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg><input id="chord-search" type="search" placeholder="Try Am, C7, F#..." autocomplete="off" /></div>
+                <div class="filter-row">
+                  <label class="select-field"><span>ROOT NOTE</span><select id="root-filter"><option value="all">All notes</option></select></label>
+                  <label class="select-field"><span>CHORD TYPE</span><select id="quality-filter"><option value="all">All types</option><option value="major">Major</option><option value="minor">Minor</option><option value="7">Dominant 7</option><option value="maj7">Major 7</option><option value="m7">Minor 7</option><option value="sus2">Suspended 2</option><option value="sus4">Suspended 4</option><option value="dim">Diminished</option></select></label>
+                </div>
+              </div>
+              <div class="library-head"><span>CHORDS <span id="results-count">96 RESULTS</span></span><span>CLICK TO EXPLORE ↘</span></div>
+              <div class="chord-list" id="chord-list" aria-label="Chords"></div>
+            </div>
+            <aside class="chord-detail" id="chord-detail" aria-label="Selected chord details">
+              <div class="detail-overline"><span><span class="detail-spark">✳</span> CHORD STUDY</span><span id="chord-number">01 / 96</span></div>
+              <div class="detail-title-row"><div><div class="detail-kicker" id="chord-quality">MAJOR CHORD</div><h4 id="selected-chord-name">C</h4></div><span class="difficulty-tag" id="chord-difficulty">OPEN SHAPE</span></div>
+              <div class="diagram-surface"><div class="diagram-frame" id="chord-diagram" aria-label="Guitar chord diagram"></div></div>
+              <div class="diagram-caption"><span><span class="root-example"></span> ROOT NOTE</span><span><span class="finger-example"></span> FRETTED NOTE</span><span>○ OPEN &nbsp; × MUTED</span></div>
+              <div class="detail-facts"><div><small>NOTES IN CHORD</small><strong id="chord-notes">C · E · G</strong></div><div><small>PLAYING POSITION</small><strong id="chord-position">Open position</strong></div></div>
+              <p class="detail-tip" id="chord-tip">Keep your fingers rounded and let every string ring cleanly.</p>
+              <button type="button" class="button button-dark detail-play" id="play-chord"><span aria-hidden="true">♪</span> Hear this chord <span aria-hidden="true">↗</span></button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="panel-progressions" role="tabpanel" aria-labelledby="tab-progressions" hidden>
+          <div class="panel-intro progressions-intro">
+            <div><span class="section-kicker">THE CONNECTIONS</span><h3>Chord progressions<span class="title-period">.</span></h3><p>Play familiar chord patterns in any key. Slow them down until they click.</p></div>
+            <div class="count-chip"><strong>08</strong><span>CLASSIC PATTERNS</span></div>
+          </div>
+          <div class="progressions-toolbar">
+            <label class="key-selector"><span>PLAY IN THE KEY OF</span><select id="key-select" aria-label="Choose progression key"></select></label>
+            <div class="key-explainer"><span class="key-explainer-icon">♪</span><span>Change the key and every chord updates automatically.</span></div>
+          </div>
+          <div class="progressions-layout">
+            <div class="progression-library">
+              <div class="library-head"><span>POPULAR PROGRESSIONS</span><span>SELECT ONE ↘</span></div>
+              <div class="progression-cards" id="progression-list"></div>
+            </div>
+            <aside class="practice-card" aria-label="Progression practice">
+              <div class="practice-eyebrow"><span class="practice-pulse"></span> PLAY ALONG STUDIO <span>02 / PRACTICE</span></div>
+              <h4 id="progression-title">The Four-Chord Pop</h4>
+              <p id="progression-description">The backbone of countless pop songs.</p>
+              <div class="progression-steps" id="progression-steps" aria-label="Chords in progression"></div>
+              <div class="practice-preview"><div class="preview-main"><div><small>CURRENT CHORD</small><div class="preview-name" id="practice-current-name">C</div><div class="preview-degree" id="practice-current-degree">I · TONIC</div></div><div class="mini-diagram" id="practice-mini-diagram" aria-label="Current chord fingering"></div></div></div>
+              <div class="practice-controls">
+                <div class="tempo-line"><label for="tempo-slider">TEMPO <span>BPM</span></label><div class="tempo-value"><output id="tempo-output" for="tempo-slider">90</output> <span>BPM</span></div></div>
+                <input id="tempo-slider" type="range" min="50" max="180" step="5" value="90" aria-label="Tempo in beats per minute" />
+                <div class="beat-row"><div class="beat-dots" id="beat-dots" aria-label="Beat counter"><span class="beat-dot"></span><span class="beat-dot"></span><span class="beat-dot"></span><span class="beat-dot"></span></div><label class="toggle-row" for="metronome-toggle"><span>METRONOME</span><input type="checkbox" id="metronome-toggle" checked /><span class="switch-ui" aria-hidden="true"></span></label></div>
+                <div class="transport-row"><button type="button" class="button button-lime transport-play" id="transport-play"><span id="transport-icon" aria-hidden="true">▶</span> <span id="transport-text">Start practice</span></button><button type="button" class="transport-stop" id="transport-stop" title="Stop and reset" aria-label="Stop and reset playback"><span aria-hidden="true">■</span></button></div>
+                <p class="practice-hint" id="practice-status" role="status">Each chord plays for four beats. Tap any chord to preview it.</p>
+              </div>
+            </aside>
+          </div>
+          <div class="learning-note"><span class="learning-icon">i</span><p><strong>What do the Roman numerals mean?</strong> They describe chords by their position in a key. Uppercase numerals are major, lowercase are minor, and “7” indicates a seventh chord. The same pattern works in every key.</p></div>
+        </section>
+      </main>
+      <footer class="site-footer"><div class="footer-brand">fret<span>wise</span><span class="footer-symbol">✳</span></div><p>Practice a little. Play a lot.</p><span>BUILT FOR CURIOUS GUITARISTS · STANDARD TUNING</span></footer>
+    </div>
+  </body>
+</html>
