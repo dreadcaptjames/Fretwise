@@ -25,7 +25,8 @@ const QUALITIES = {
   m7:{label:'Minor 7',suffix:'m7',intervals:[0,3,7,10],hint:'Smooth and mellow; popular in soul and jazz.'},
   sus2:{label:'Suspended 2',suffix:'sus2',intervals:[0,2,7],hint:'Open, floating sound without a major or minor third.'},
   sus4:{label:'Suspended 4',suffix:'sus4',intervals:[0,5,7],hint:'Creates gentle tension that wants to resolve.'},
-  dim:{label:'Diminished',suffix:'dim',intervals:[0,3,6],hint:'Tense and unsettled; great for linking other chords.'}
+  dim:{label:'Diminished',suffix:'dim',intervals:[0,3,6],hint:'Tense and unsettled; great for linking other chords.'},
+  power:{label:'Power chord',suffix:'5',intervals:[0,7],hint:'The root and fifth, with no major or minor third.'}
 };
 const QUALITY_ORDER = ['major','minor','7','maj7','m7','sus2','sus4','dim'];
 const OPEN_SHAPES = {
@@ -82,8 +83,19 @@ const PROGRESSIONS = [
   {id:'canon',name:'The Canon Sequence',genre:'SONGWRITING',description:'A flowing eight-chord pattern used in classical and pop music.',roman:'I – V – vi – iii – IV – I – IV – V',steps:[[0,'major','I'],[7,'major','V'],[9,'minor','vi'],[4,'minor','iii'],[5,'major','IV'],[0,'major','I'],[5,'major','IV'],[7,'major','V']]}
 ];
 
+// These are familiar stylistic building blocks, not exact song transcriptions.
+const PUNK_PROGRESSIONS = [
+  {id:'anthem',name:'Three-Chord Anthem',genre:'CLASSIC PUNK',description:'The fast and direct I–IV–V backbone of punk rhythm guitar.',roman:'I5 – IV5 – V5 – IV5',steps:[[0,'I5'],[5,'IV5'],[7,'V5'],[5,'IV5']]},
+  {id:'pop-punk',name:'Pop-Punk Lift',genre:'POP-PUNK',description:'A hook-friendly, sing-along four-chord cycle.',roman:'I5 – V5 – vi5 – IV5',steps:[[0,'I5'],[7,'V5'],[9,'vi5'],[5,'IV5']]},
+  {id:'skate',name:'Skate-Punk Drop',genre:'SKATE PUNK',description:'A punchy lowered-seventh move with room for an explosive return.',roman:'I5 – ♭VII5 – IV5 – I5',steps:[[0,'I5'],[10,'♭VII5'],[5,'IV5'],[0,'I5']]},
+  {id:'garage',name:'Garage Shout',genre:'GARAGE PUNK',description:'Rough-edged movement between the tonic, fourth, and flat seventh.',roman:'I5 – IV5 – ♭VII5 – IV5',steps:[[0,'I5'],[5,'IV5'],[10,'♭VII5'],[5,'IV5']]},
+  {id:'descend',name:'Descending Charge',genre:'HARDCORE / PUNK',description:'A darker descending riff built for tight, palm-muted picking.',roman:'I5 – ♭VII5 – ♭VI5 – ♭VII5',steps:[[0,'I5'],[10,'♭VII5'],[8,'♭VI5'],[10,'♭VII5']]},
+  {id:'turnaround',name:'Fast Turnaround',genre:'MELODIC PUNK',description:'An urgent I–V–IV turnaround with a quick push back to the fifth.',roman:'I5 – V5 – IV5 – V5',steps:[[0,'I5'],[7,'V5'],[5,'IV5'],[7,'V5']]}
+];
+
 const $ = (selector) => document.querySelector(selector);
-const state = {tab:'chords',selectedChord:{pc:0,quality:'major'},selectedProgression:'pop',key:MAJOR_KEYS[0],stepIndex:0,bpm:90,playing:false,globalBeat:0,interval:null,audio:null};
+const state = {tab:'chords',selectedChord:{pc:0,quality:'major'},selectedProgression:'pop',key:MAJOR_KEYS[0],stepIndex:0,bpm:90,playing:false,globalBeat:0,interval:null,audio:null,
+  punk:{key:MAJOR_KEYS[4],selected:'anthem',bpm:160,stepIndex:0,eighthIndex:0,playing:false,interval:null}};
 
 function mod(n,m=12){return((n%m)+m)%m;}
 function noteName(pc,preference='mixed'){
@@ -105,6 +117,27 @@ function shapeFor(pc,quality){
   return {frets,fingers:null,open:offset===0,barre,tip:null};
 }
 function chordFor(pc,quality){return {pc:mod(pc),quality,shape:shapeFor(mod(pc),quality)};}
+function powerChordFor(pc,rootString='auto',includeOctave=true){
+  pc=mod(pc);
+  const eFret=mod(pc-4),aFret=mod(pc-9);
+  const string=rootString==='auto'?(eFret<=aFret?'e':'a'):rootString;
+  const fret=string==='e'?eFret:aFret;
+  const start=string==='e'?0:1;
+  const frets=Array(6).fill(-1),fingers=Array(6).fill(0);
+  frets[start]=fret;
+  frets[start+1]=fret+2;
+  if(fret>0)fingers[start]=1;
+  fingers[start+1]=3;
+  if(includeOctave){frets[start+2]=fret+2;fingers[start+2]=4;}
+  return {pc,quality:'power',shape:{frets,fingers,open:fret===0,barre:null,rootString:string,rootFret:fret}};
+}
+function punkChordName(pc){return noteName(pc,state.punk.key.accidentals)+'5';}
+function punkSteps(){
+  const progression=PUNK_PROGRESSIONS.find(p=>p.id===state.punk.selected)||PUNK_PROGRESSIONS[0];
+  return progression.steps.map(([interval,roman])=>({pc:mod(state.punk.key.pc+interval),roman}));
+}
+function selectedPunk(){return PUNK_PROGRESSIONS.find(p=>p.id===state.punk.selected)||PUNK_PROGRESSIONS[0];}
+
 function describePosition(shape){
   if(shape.frets.includes(0)) return 'Open position';
   const min=Math.min(...shape.frets.filter(f=>f>0));
@@ -266,18 +299,21 @@ function audioContext(){
   if(state.audio.state==='suspended')state.audio.resume().catch(()=>{});
   return state.audio;
 }
-function strum(chord){
+function strum(chord,options={}){
   const ctx=audioContext();if(!ctx)return;
   const notes=chord.shape.frets.flatMap((f,i)=>f<0?[]:[STRING_MIDI[i]+f]);
+  const duration=options.duration??1.45,stagger=options.stagger??.051;
+  const volume=options.volume??(chord.quality==='power'?.07:.095);
   for(let i=0;i<notes.length;i++){
-    const at=ctx.currentTime+.02+i*.051;
+    const at=ctx.currentTime+.01+i*stagger;
     const osc=ctx.createOscillator(),gain=ctx.createGain();
-    osc.type='triangle';osc.frequency.value=440*Math.pow(2,(notes[i]-69)/12);
+    osc.type=chord.quality==='power'?'sawtooth':'triangle';
+    osc.frequency.value=440*Math.pow(2,(notes[i]-69)/12);
     gain.gain.setValueAtTime(.0001,at);
-    gain.gain.exponentialRampToValueAtTime(.095,at+.018);
-    gain.gain.exponentialRampToValueAtTime(.001,at+1.45);
+    gain.gain.exponentialRampToValueAtTime(volume,at+.009);
+    gain.gain.exponentialRampToValueAtTime(.001,at+duration);
     osc.connect(gain);gain.connect(ctx.destination);
-    osc.start(at);osc.stop(at+1.46);
+    osc.start(at);osc.stop(at+duration+.02);
   }
 }
 function metronomeClick(accent){
@@ -291,10 +327,97 @@ function metronomeClick(accent){
   gain.gain.exponentialRampToValueAtTime(.001,at+.07);
   osc.connect(gain);gain.connect(ctx.destination);osc.start(at);osc.stop(at+.08);
 }
+
+function renderPowerExplorer(){
+  const pc=Number($('#power-root').value);
+  const string=$('#power-string').value;
+  const octave=$('#power-octave').checked;
+  const chord=powerChordFor(pc,string,octave);
+  const fifth=noteName(pc+7,'mixed'),root=noteName(pc,'mixed');
+  $('#power-chord-name').textContent=root+'5';
+  $('#power-diagram').innerHTML=chordDiagramSVG(chord);
+  $('#power-notes').textContent=octave?`${root} · ${fifth} · ${root} (octave)`:`${root} · ${fifth}`;
+  $('#power-position').textContent=`${string==='e'?'Low E':'A'} string · ${chord.shape.rootFret===0?'open root':'fret '+chord.shape.rootFret}`;
+  $('#power-fingering').textContent=chord.shape.rootFret===0?
+    `Let the ${string==='e'?'low E':'A'} string ring open. Fret the fifth two frets up on the next string${octave?', then add the octave on the following string':''}. Mute all other strings.`:
+    `Index finger on fret ${chord.shape.rootFret}; ring finger on fret ${chord.shape.rootFret+2} of the next string${octave?', pinky on that same fret of the following string':''}. Mute all other strings.`;
+  document.querySelectorAll('[data-power-example]').forEach(button=>button.classList.toggle('selected',Number(button.dataset.powerExample)===pc));
+}
+function renderPunkList(){
+  $('#punk-list').innerHTML=PUNK_PROGRESSIONS.map(p=>{
+    const selected=state.punk.selected===p.id;
+    const chordSummary=p.steps.map(([offset])=>punkChordName(state.punk.key.pc+offset)).join(' – ');
+    return `<button class="progression-card${selected?' selected':''}" type="button" data-punk="${p.id}" aria-pressed="${selected}"><div class="progression-card-heading"><strong>${p.name}</strong><span class="progression-card-category">${p.genre}</span></div><p>${p.description}</p><div class="progression-card-degrees">${p.roman}</div><div class="progression-card-chords">${chordSummary}</div></button>`;
+  }).join('');
+  renderPunkPractice();
+}
+function renderPunkPractice(){
+  const p=selectedPunk(),steps=punkSteps();
+  $('#punk-title').textContent=p.name;
+  $('#punk-description').textContent=p.description;
+  $('#punk-steps').innerHTML=steps.map((step,i)=>`<button type="button" class="step-tile${i===state.punk.stepIndex?' active':''}" data-punk-step="${i}" aria-pressed="${i===state.punk.stepIndex}" aria-label="Bar ${i+1}, ${punkChordName(step.pc)}, ${step.roman}"><span class="step-degree">${step.roman}</span><span class="step-chord">${punkChordName(step.pc)}</span><span class="step-number">BAR ${String(i+1).padStart(2,'0')}</span></button>`).join('');
+  updatePunkChord();
+}
+function updatePunkChord(){
+  const steps=punkSteps(),step=steps[state.punk.stepIndex]||steps[0];
+  if(!step)return;
+  document.querySelectorAll('#punk-steps .step-tile').forEach((el,i)=>{
+    const active=i===state.punk.stepIndex;
+    el.classList.toggle('active',active);
+    el.setAttribute('aria-pressed',String(active));
+  });
+  $('#punk-current-name').textContent=punkChordName(step.pc);
+  $('#punk-current-degree').textContent=`${step.roman} · POWER CHORD`;
+  $('#punk-mini-diagram').innerHTML=chordDiagramSVG(powerChordFor(step.pc,'auto',true),{mini:true});
+}
+function setPunkBeat(beat=-1){document.querySelectorAll('#punk-beats .beat-dot').forEach((el,i)=>el.classList.toggle('on',i===beat));}
+function updatePunkTransport(){
+  $('#punk-play-icon').textContent=state.punk.playing?'Ⅱ':'▶';
+  $('#punk-play-text').textContent=state.punk.playing?'Pause punk practice':'Start punk practice';
+}
+function stopPunkPractice(reset=true){
+  if(state.punk.interval!==null){clearInterval(state.punk.interval);state.punk.interval=null;}
+  state.punk.playing=false;
+  if(reset){state.punk.eighthIndex=0;state.punk.stepIndex=0;updatePunkChord();}
+  setPunkBeat();updatePunkTransport();
+  $('#punk-status').textContent='Four beats per chord. Follow the dots and keep the downstrokes tight.';
+}
+function tickPunk(){
+  const steps=punkSteps(),eighth=state.punk.eighthIndex;
+  const bar=Math.floor(eighth/8)%steps.length;
+  const within=eighth%8,beat=Math.floor(within/2);
+  state.punk.stepIndex=bar;
+  if(within%2===0){updatePunkChord();setPunkBeat(beat);if($('#punk-metronome').checked)metronomeClick(beat===0);}
+  if($('#punk-rhythm').value==='eighths'||within%2===0){
+    const halfBeat=60/state.punk.bpm/2;
+    strum(powerChordFor(steps[bar].pc,'auto',true),{duration:Math.min(.16,halfBeat*.8),stagger:.007,volume:within%2===0?.048:.033});
+  }
+  $('#punk-status').textContent=`Playing · bar ${bar+1} of ${steps.length} · beat ${beat+1} of 4`;
+  state.punk.eighthIndex++;
+}
+function startPunkPractice(){
+  state.punk.playing=true;
+  updatePunkTransport();tickPunk();
+  state.punk.interval=setInterval(tickPunk,30000/state.punk.bpm);
+}
+function pausePunkPractice(){
+  if(state.punk.interval!==null)clearInterval(state.punk.interval);
+  state.punk.interval=null;state.punk.playing=false;
+  setPunkBeat();updatePunkTransport();
+  $('#punk-status').textContent='Paused. Press Start to pick up where you left off.';
+}
+function changePunkTempo(bpm){
+  state.punk.bpm=bpm;
+  $('#punk-tempo-output').textContent=String(bpm);
+  const pct=(bpm-80)/140*100;
+  $('#punk-tempo').style.background=`linear-gradient(to right,#c6ff70 ${pct}%,#4c6b56 ${pct}%)`;
+  if(state.punk.playing){clearInterval(state.punk.interval);state.punk.interval=setInterval(tickPunk,30000/bpm);}
+}
+
 function switchTab(tab,focusTab=false){
-  if(state.tab!==tab&&state.playing)stopPractice();
+  if(state.tab!==tab){if(state.playing)stopPractice();if(state.punk.playing)stopPunkPractice();}
   state.tab=tab;
-  for(const section of ['chords','progressions']){
+  for(const section of ['chords','progressions','power']){
     const active=tab===section;
     $(`#panel-${section}`).hidden=!active;
     const button=$(`#tab-${section}`);
@@ -312,7 +435,12 @@ function init(){
   }).join(''));
   $('#key-select').innerHTML=MAJOR_KEYS.map(k=>`<option value="${k.name}">${k.name} major</option>`).join('');
   $('#key-select').value='C';
+  $('#power-root').innerHTML=ROOTS.map(pc=>`<option value="${pc}">${noteName(pc)}</option>`).join('');
+  $('#power-root').value='7';
+  $('#punk-key').innerHTML=MAJOR_KEYS.map(k=>`<option value="${k.name}">${k.name} major tonic</option>`).join('');
+  $('#punk-key').value='E';
   renderChordList();selectChord(0,'major');renderProgressions();changeTempo(90);
+  renderPowerExplorer();renderPunkList();changePunkTempo(160);
   $('#chord-list').addEventListener('click',e=>{
     const tile=e.target.closest('.chord-tile');if(!tile)return;
     selectChord(Number(tile.dataset.pc),tile.dataset.quality);
@@ -323,9 +451,14 @@ function init(){
   $('#play-chord').addEventListener('click',()=>strum(chordFor(state.selectedChord.pc,state.selectedChord.quality)));
   $('#tab-chords').addEventListener('click',()=>switchTab('chords'));
   $('#tab-progressions').addEventListener('click',()=>switchTab('progressions'));
+  $('#tab-power').addEventListener('click',()=>switchTab('power'));
+  const tabNames=['chords','progressions','power'];
   for(const tab of document.querySelectorAll('.tab'))tab.addEventListener('keydown',event=>{
-    if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
-      event.preventDefault();switchTab(state.tab==='chords'?'progressions':'chords',true);
+    if(event.key==='ArrowLeft'||event.key==='ArrowRight'||event.key==='Home'||event.key==='End'){
+      event.preventDefault();
+      const direction=event.key==='ArrowRight'?1:-1;
+      const target=event.key==='Home'?0:event.key==='End'?tabNames.length-1:mod(tabNames.indexOf(state.tab)+direction,tabNames.length);
+      switchTab(tabNames[target],true);
     }
   });
   $('#hero-chords').addEventListener('click',()=>{switchTab('chords');$('#main').scrollIntoView({behavior:'smooth'});});
@@ -344,12 +477,42 @@ function init(){
     updatePracticeChord();strum(chordFor(step.pc,step.quality));
     if(state.playing){updateBeatDots(0);$('#practice-status').textContent=`Playing · bar ${idx+1} of ${stepsFor(selectedProgression()).length} · beat 1 of 4`;}
   });
+  $('#power-root').addEventListener('change',renderPowerExplorer);
+  $('#power-string').addEventListener('change',renderPowerExplorer);
+  $('#power-octave').addEventListener('change',renderPowerExplorer);
+  document.querySelector('.power-example-buttons').addEventListener('click',e=>{
+    const button=e.target.closest('[data-power-example]');if(!button)return;
+    const pc=Number(button.dataset.powerExample);
+    $('#power-root').value=String(pc);
+    $('#power-string').value=mod(pc-4)<=mod(pc-9)?'e':'a';
+    renderPowerExplorer();
+  });
+  $('#power-play').addEventListener('click',()=>strum(powerChordFor(Number($('#power-root').value),$('#power-string').value,$('#power-octave').checked)));
+  $('#punk-key').addEventListener('change',e=>{
+    stopPunkPractice();state.punk.key=MAJOR_KEYS.find(k=>k.name===e.target.value)||MAJOR_KEYS[4];renderPunkList();
+  });
+  $('#punk-list').addEventListener('click',e=>{
+    const card=e.target.closest('[data-punk]');if(!card)return;
+    stopPunkPractice();state.punk.selected=card.dataset.punk;renderPunkList();
+  });
+  $('#punk-steps').addEventListener('click',e=>{
+    const tile=e.target.closest('[data-punk-step]');if(!tile)return;
+    const idx=Number(tile.dataset.punkStep),step=punkSteps()[idx];
+    state.punk.stepIndex=idx;state.punk.eighthIndex=idx*8+(state.punk.playing?1:0);
+    updatePunkChord();setPunkBeat(0);
+    strum(powerChordFor(step.pc,'auto',true));
+  });
+  $('#punk-tempo').addEventListener('input',e=>changePunkTempo(Number(e.target.value)));
+  $('#punk-play').addEventListener('click',()=>state.punk.playing?pausePunkPractice():startPunkPractice());
+  $('#punk-stop').addEventListener('click',()=>stopPunkPractice());
   $('#tempo-slider').addEventListener('input',e=>changeTempo(Number(e.target.value)));
   $('#transport-play').addEventListener('click',()=>state.playing?pausePractice():resumePractice());
   $('#transport-stop').addEventListener('click',()=>stopPractice());
   document.addEventListener('keydown',e=>{
-    if(e.code!=='Space'||state.tab!=='progressions'||['INPUT','TEXTAREA','SELECT','BUTTON'].includes(document.activeElement.tagName))return;
-    e.preventDefault();state.playing?pausePractice():resumePractice();
+    if(e.code!=='Space'||!['progressions','power'].includes(state.tab)||['INPUT','TEXTAREA','SELECT','BUTTON'].includes(document.activeElement.tagName))return;
+    e.preventDefault();
+    if(state.tab==='power')state.punk.playing?pausePunkPractice():startPunkPractice();
+    else state.playing?pausePractice():resumePractice();
   });
 }
 

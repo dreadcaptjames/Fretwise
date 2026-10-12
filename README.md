@@ -33,3 +33,11 @@ This is a static website with no build step or backend. GitHub Pages, any static
 - A synthesized strum is a pitch reference, not a realistic sampled guitar recording.
 
 Made for the simple joy of playing guitar.
+
+## Power chords & punk practice
+
+The **Power chords** tab adds a step-by-step guide to root–fifth shapes, an optional octave, fretting-hand muting, palm muting, and downstroke technique. The interactive fretboard lets you pick all 12 roots on the low E or A string and hear two- or three-note shapes.
+
+Six punk-inspired progressions — classic I–IV–V, pop-punk, skate-punk, garage, descending hardcore-style, and melodic-punk turnaround — can be transposed to all 12 keys. The dedicated practice player supports 80–220 BPM, quarter-note hits or eighth-note downstrokes, a metronome, and highlighted chord changes. Shapes and sound are calculated in-browser; the patterns are original exercises based on common conventions, not exact song transcriptions.
+
+The power chord designation `5` indicates root and perfect fifth without a third: it does not determine major or minor quality. Each progression chord lasts one four-beat bar.

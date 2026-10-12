@@ -206,3 +206,53 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border:2px solid var(
 .progression-library,.practice-card,.progressions-layout,.progression-steps{min-width:0}
 .progression-steps{max-width:100%}
 @media(max-width:850px){.explorer-layout,.progressions-layout{grid-template-columns:minmax(0,1fr)}}
+
+/* Power chord workshop + punk practice */
+.power-intro{margin-bottom:22px}
+.power-lesson-banner{display:flex;align-items:center;gap:21px;padding:22px 24px;margin-bottom:30px;background:#18352e;border:1px solid #345e46;border-radius:12px;color:#d9e9d9}
+.power-lesson-banner .lesson-bolt{display:grid;place-items:center;flex:0 0 56px;height:56px;border-radius:12px;background:var(--lime);color:#18352e;font-size:26px}
+.power-lesson-banner p{font-size:13px;line-height:1.8;margin:0;color:#c2d7c5}
+.power-lesson-banner strong{color:var(--lime)}
+.power-subhead{margin:0 0 19px}
+.power-subhead h4{font-size:clamp(24px,2.6vw,32px);line-height:1.2;letter-spacing:-1.2px;margin:8px 0}
+.power-subhead p{font-size:12px;line-height:1.6;color:#667767;margin-bottom:0}
+.power-lesson-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.power-lesson-card{border:1px solid #d7e0d1;border-radius:11px;background:#f9faf5;padding:20px 18px 19px;min-width:0}
+.lesson-num{display:grid;place-items:center;width:32px;height:32px;background:#dfefc7;border-radius:8px;color:#49663f;font:700 12px 'Space Grotesk'}
+.power-lesson-card h5{font:700 17px 'Space Grotesk';letter-spacing:-.4px;margin:16px 0 8px;color:#1f3025}
+.power-lesson-card p{font-size:12px;color:#637264;line-height:1.7;margin:0}
+.power-lesson-card p strong{color:#2a422f}
+.power-how-to{margin-bottom:38px}
+.power-builder{border-top:1px solid #d5decf;padding-top:29px;margin-bottom:38px}
+.power-builder-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.85fr);gap:18px;align-items:start}
+.power-builder-controls,.power-builder-diagram{background:var(--paper);border:1px solid #d5e0cf;border-radius:11px;padding:24px;min-width:0}
+.power-control-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.power-octave-row{display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid #dce4d7;border-radius:8px;background:#f0f5e9;margin-top:17px;padding:12px 13px;font-size:13px;font-weight:800;color:#334b37}
+.power-octave-row input{accent-color:#719e4b;width:19px;height:19px;cursor:pointer}
+.power-octave-row small{display:block;font-size:10px;color:#758876;font-weight:500;margin-top:3px}
+.power-examples{margin:25px 0 19px}
+.power-examples>span,.power-builder-title>span{font-size:9px;letter-spacing:1.3px;color:#6c816e;font-weight:800}
+.power-example-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.power-example-buttons button{min-width:53px;min-height:39px;border:1px solid #cbd8c2;background:#fff;color:#284030;border-radius:7px;font-family:'Space Grotesk';font-weight:700}
+.power-example-buttons button:hover,.power-example-buttons button.selected{background:#def6bf;border-color:#83b65a}
+.power-builder-facts{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #d9e2d5;padding-top:18px;gap:12px}
+.power-builder-facts small{display:block;font-size:9px;color:#6c806c;font-weight:800;letter-spacing:1px;margin-bottom:6px}
+.power-builder-facts strong{font-size:13px;line-height:1.5;color:#273c2c}
+.power-instruction{color:#607260;font-size:12px;line-height:1.75;margin:20px 0}
+.power-preview-button{width:100%;justify-content:space-between;min-height:47px}
+.power-builder-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.power-builder-title strong{font:700 39px/1 'Space Grotesk';color:#263b2c}
+.power-builder-diagram .diagram-surface{min-height:290px}
+.power-builder-diagram .diagram-frame svg{max-height:290px}
+.power-builder-diagram .diagram-caption{margin-bottom:0}
+.power-punk-area{border-top:1px solid #d5decf;padding-top:30px}
+.punk-rhythm-label{display:flex;flex-direction:column;gap:7px;margin-top:17px}
+.punk-rhythm-label span{font-size:9px;letter-spacing:1.2px;font-weight:800;color:#b8d4bd}
+.punk-rhythm-label select{width:100%;height:40px;background:#254638;border:1px solid #50745e;color:#eff9eb;font:600 12px 'DM Sans';border-radius:7px;padding:0 10px}
+#punk-list .progression-card:focus-visible,#punk-steps .step-tile:focus-visible{outline-color:#7bb147}
+#punk-steps{min-width:0;max-width:100%}
+#punk-list .progression-card-chords{overflow-wrap:anywhere}
+@media(max-width:1100px){.power-lesson-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.power-builder-layout{grid-template-columns:minmax(0,1fr) minmax(285px,1fr)}.tab{flex:1;justify-content:center;padding:16px 15px;font-size:15px;gap:10px}.tab-arrow{margin-left:0}}
+@media(max-width:850px){.power-builder-layout{grid-template-columns:1fr}.power-builder-controls,.power-builder-diagram{max-width:690px;width:100%;margin:auto}.power-lesson-grid{gap:10px}}
+@media(max-width:580px){.tabs{gap:2px}.tabs .tab{min-width:0;padding:14px 7px;font-size:11px;gap:5px;letter-spacing:-.45px}.tabs .tab-index{font-size:8px}.power-lesson-banner{padding:15px;gap:13px;align-items:flex-start}.power-lesson-banner .lesson-bolt{flex-basis:40px;height:40px;font-size:19px}.power-lesson-banner p{font-size:11px}.power-lesson-grid{grid-template-columns:1fr}.power-lesson-card{padding:16px}.power-lesson-card h5{margin:10px 0 5px}.power-builder-controls,.power-builder-diagram{padding:16px}.power-control-grid{grid-template-columns:1fr 1fr;gap:10px}.power-example-buttons{gap:6px}.power-builder-title strong{font-size:33px}.power-builder-facts{grid-template-columns:1fr}.power-punk-area .key-selector{gap:10px}.power-punk-area .key-selector>span{font-size:9px}.power-punk-area .key-selector select{min-width:0;max-width:165px;font-size:13px}.power-punk-area .progression-card-category{white-space:normal;text-align:center}}
+@media(max-width:365px){.tabs .tab{font-size:10px;padding:12px 5px}.tabs .tab-index{display:none}.power-control-grid{grid-template-columns:1fr}}

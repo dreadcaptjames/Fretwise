@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0c1b1b" />
-    <meta name="description" content="Learn guitar chords, explore classic chord progressions, and practice with a built-in strummer and metronome. Free, no account required." />
+    <meta name="description" content="Learn guitar chords, power chord technique, and punk or classic progressions with interactive fretboards and a built-in practice studio. Free, no account required." />
     <title>Fretwise — Your guitar practice space</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
@@ -47,15 +47,16 @@
       </section>
 
       <main id="main" class="app-main">
-        <div class="section-topline"><span>YOUR WORKSPACE</span><span>01 — 02</span></div>
+        <div class="section-topline"><span>YOUR WORKSPACE</span><span>01 — 03</span></div>
         <div class="main-title-row">
-          <div><h2>Pick up. Tune in. <span>Play.</span></h2><p>Two places to start. There's no wrong one.</p></div>
+          <div><h2>Pick up. Tune in. <span>Play.</span></h2><p>Three paths to better guitar playing. Pick one and dig in.</p></div>
           <div class="tuning-pill"><span class="tuning-led"></span><div><small>TUNING</small><strong>E · A · D · G · B · e</strong></div></div>
         </div>
 
         <div class="tabs" role="tablist" aria-label="Learning sections">
           <button type="button" class="tab active" id="tab-chords" role="tab" aria-selected="true" aria-controls="panel-chords"><span class="tab-index">01</span> Chord library <span class="tab-arrow" aria-hidden="true">↗</span></button>
           <button type="button" class="tab" id="tab-progressions" role="tab" aria-selected="false" aria-controls="panel-progressions" tabindex="-1"><span class="tab-index">02</span> Chord progressions <span class="tab-arrow" aria-hidden="true">↗</span></button>
+          <button type="button" class="tab" id="tab-power" role="tab" aria-selected="false" aria-controls="panel-power" tabindex="-1"><span class="tab-index">03</span> Power chords <span class="tab-arrow" aria-hidden="true">↗</span></button>
         </div>
 
         <section class="tab-panel" id="panel-chords" role="tabpanel" aria-labelledby="tab-chords">
@@ -118,6 +119,62 @@
             </aside>
           </div>
           <div class="learning-note"><span class="learning-icon">i</span><p><strong>What do the Roman numerals mean?</strong> They describe chords by their position in a key. Uppercase numerals are major, lowercase are minor, and “7” indicates a seventh chord. The same pattern works in every key.</p></div>
+        </section>
+
+        <section class="tab-panel" id="panel-power" role="tabpanel" aria-labelledby="tab-power" hidden>
+          <div class="panel-intro power-intro">
+            <div><span class="section-kicker">LOUD, SIMPLE, EFFECTIVE</span><h3>Power chords<span class="title-period">.</span></h3><p>Two notes. Endless riffs. Learn movable shapes, then put them to work in punk progressions.</p></div>
+            <div class="count-chip"><strong>06</strong><span>PUNK PRACTICE LOOPS</span></div>
+          </div>
+          <div class="power-lesson-banner"><span class="lesson-bolt" aria-hidden="true">⚡</span><p><strong>What's a power chord?</strong> The root note and its perfect fifth, sometimes with the root an octave higher. With no third, a power chord is neither major nor minor. Write it as <strong>E5</strong>, <strong>A5</strong>, <strong>G5</strong>, and so on.</p></div>
+          <div class="power-how-to">
+            <div class="power-subhead"><span class="section-kicker">01 / THE TECHNIQUE</span><h4>Build the shape. Move the shape.</h4></div>
+            <div class="power-lesson-grid">
+              <article class="power-lesson-card"><span class="lesson-num">01</span><h5>Find the root</h5><p>Put your index finger on a note on the low E or A string. That note names your chord: for example, low E string fret 3 = <strong>G5</strong>.</p></article>
+              <article class="power-lesson-card"><span class="lesson-num">02</span><h5>Add the fifth</h5><p>Place your ring finger <strong>two frets higher</strong> on the next thicker-to-thinner string. Strike just those two strings.</p></article>
+              <article class="power-lesson-card"><span class="lesson-num">03</span><h5>Try the octave</h5><p>For a thicker three-note shape, put your pinky on the same fret as your ring finger, one string farther toward the floor.</p></article>
+              <article class="power-lesson-card"><span class="lesson-num">04</span><h5>Make it punk</h5><p>Mute unused strings with your fretting hand. Use tight downstrokes, and rest the picking-hand palm lightly by the bridge for punchy palm mutes.</p></article>
+            </div>
+          </div>
+          <div class="power-builder">
+            <div class="power-subhead"><span class="section-kicker">02 / INTERACTIVE FRETBOARD</span><h4>Explore any power chord.</h4><p>All diagrams are for standard tuning, with strings shown low E to high e from left to right.</p></div>
+            <div class="power-builder-layout">
+              <div class="power-builder-controls">
+                <div class="power-control-grid">
+                  <label class="select-field"><span>ROOT NOTE</span><select id="power-root" aria-label="Power chord root note"></select></label>
+                  <label class="select-field"><span>ROOT STRING</span><select id="power-string" aria-label="Power chord root string"><option value="e">Low E string</option><option value="a">A string</option></select></label>
+                </div>
+                <label class="power-octave-row" for="power-octave"><input type="checkbox" id="power-octave" checked /><span>Add the octave <small>Three-note shape</small></span></label>
+                <div class="power-examples"><span>TRY THESE SHAPES</span><div class="power-example-buttons"><button type="button" data-power-example="5">F5</button><button type="button" data-power-example="7">G5</button><button type="button" data-power-example="9">A5</button><button type="button" data-power-example="0">C5</button><button type="button" data-power-example="2">D5</button><button type="button" data-power-example="4">E5</button></div></div>
+                <div class="power-builder-facts"><div><small>CHORD TONES</small><strong id="power-notes">G · D · G</strong></div><div><small>FRET POSITION</small><strong id="power-position">Low E string, fret 3</strong></div></div>
+                <p class="power-instruction" id="power-fingering">Index on the root, ring finger on the fifth, pinky on the octave.</p>
+                <button type="button" id="power-play" class="button button-dark power-preview-button"><span aria-hidden="true">♪</span> Hear this power chord <span aria-hidden="true">↗</span></button>
+              </div>
+              <div class="power-builder-diagram"><div class="power-builder-title"><span>THE MOVABLE SHAPE</span><strong id="power-chord-name">G5</strong></div><div class="diagram-surface"><div id="power-diagram" class="diagram-frame" aria-live="polite"></div></div><div class="diagram-caption"><span><span class="root-example"></span> ROOT</span><span><span class="finger-example"></span> FIFTH / OCTAVE</span><span>× MUTED</span></div></div>
+            </div>
+          </div>
+          <div class="power-punk-area">
+            <div class="power-subhead"><span class="section-kicker">03 / THE PUNK PLAYBOOK</span><h4>Turn shapes into songs.</h4><p>Six common punk-inspired loops. Choose a key, tap a progression, and play along with driving downstrokes.</p></div>
+            <div class="progressions-toolbar"><label class="key-selector"><span>PLAY IN THE KEY OF</span><select id="punk-key" aria-label="Choose punk progression key"></select></label><div class="key-explainer"><span class="key-explainer-icon" aria-hidden="true">↻</span><span>All six patterns transpose automatically. “5” means a power chord.</span></div></div>
+            <div class="progressions-layout">
+              <div class="progression-library"><div class="library-head"><span>PUNK PROGRESSION LIBRARY</span><span>SELECT ONE ↘</span></div><div class="progression-cards" id="punk-list"></div></div>
+              <aside class="practice-card" aria-label="Punk power chord practice studio">
+                <div class="practice-eyebrow"><span class="practice-pulse"></span> PUNK PLAY-ALONG <span>03 / PRACTICE</span></div>
+                <h4 id="punk-title">Three-Chord Anthem</h4><p id="punk-description">A raw, classic punk foundation.</p>
+                <div class="progression-steps" id="punk-steps" aria-label="Power chords in the punk progression"></div>
+                <div class="practice-preview"><div class="preview-main"><div><small>CURRENT POWER CHORD</small><div class="preview-name" id="punk-current-name">E5</div><div class="preview-degree" id="punk-current-degree">I5 · ROOT</div></div><div class="mini-diagram" id="punk-mini-diagram" aria-label="Current power chord fingering"></div></div></div>
+                <div class="practice-controls">
+                  <div class="tempo-line"><label for="punk-tempo">PUNK TEMPO <span>BPM</span></label><div class="tempo-value"><output id="punk-tempo-output" for="punk-tempo">160</output> <span>BPM</span></div></div>
+                  <input id="punk-tempo" type="range" min="80" max="220" step="5" value="160" aria-label="Punk tempo in beats per minute" />
+                  <label class="punk-rhythm-label" for="punk-rhythm"><span>STRUMMING FEEL</span><select id="punk-rhythm"><option value="eighths">Driving eighth-note downstrokes</option><option value="quarters">Steady quarter-note hits</option></select></label>
+                  <div class="beat-row"><div class="beat-dots" id="punk-beats" aria-label="Punk beat counter"><span class="beat-dot"></span><span class="beat-dot"></span><span class="beat-dot"></span><span class="beat-dot"></span></div><label class="toggle-row" for="punk-metronome"><span>METRONOME</span><input type="checkbox" id="punk-metronome" checked /><span class="switch-ui" aria-hidden="true"></span></label></div>
+                  <div class="transport-row"><button type="button" class="button button-lime transport-play" id="punk-play"><span id="punk-play-icon" aria-hidden="true">▶</span> <span id="punk-play-text">Start punk practice</span></button><button type="button" class="transport-stop" id="punk-stop" title="Stop and reset" aria-label="Stop and reset punk practice"><span aria-hidden="true">■</span></button></div>
+                  <p class="practice-hint" id="punk-status" role="status">Four beats per chord. Follow the dots and keep the downstrokes tight.</p>
+                </div>
+              </aside>
+            </div>
+            <div class="learning-note"><span class="learning-icon">i</span><p><strong>About punk Roman numerals:</strong> The numerals name positions relative to the selected tonic. A flat sign (♭VII or ♭VI) means a lowered scale degree. Because these are root–fifth chords, “vi5” is not minor on its own. These are practice patterns, not transcriptions of specific songs.</p></div>
+          </div>
         </section>
       </main>
       <footer class="site-footer"><div class="footer-brand">fret<span>wise</span><span class="footer-symbol">✳</span></div><p>Practice a little. Play a lot.</p><span>BUILT FOR CURIOUS GUITARISTS · STANDARD TUNING</span></footer>
