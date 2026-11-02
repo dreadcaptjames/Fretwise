@@ -1,0 +1,26 @@
+{
+  "name": "Fretwise \u2014 Guitar Practice Studio",
+  "short_name": "Fretwise",
+  "description": "Learn guitar chords, power chords, punk progressions and practice your rhythm.",
+  "lang": "en",
+  "id": "/Fretwise/",
+  "start_url": "/Fretwise/",
+  "scope": "/Fretwise/",
+  "display": "standalone",
+  "background_color": "#0c1b1b",
+  "theme_color": "#0c1b1b",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

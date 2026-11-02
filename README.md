@@ -1,43 +1,37 @@
 # Fretwise 🎸
 
-**Fretwise** is a free, browser-based guitar learning space. It is designed to make chord shapes and the progressions that connect them easy to explore — whether you're picking up a guitar for the first time or looking for your next practice idea.
+Fretwise is a free, responsive guitar-learning web app. It runs entirely in a browser and can be hosted on GitHub Pages without a server or build step.
 
-## What's inside
+## Features
 
-- **96 chords** — major, minor, dominant 7, major 7, minor 7, suspended 2, suspended 4, and diminished across all twelve root notes.
-- **Visual fretboard diagrams** — clear string labels, open and muted strings, fret positions, highlighted root notes, and finger numbers on selected beginner chord shapes.
-- **Search and filters** — jump to a chord by name, root note, or chord type.
-- **Hear a chord** — synthesized strums played directly in the browser.
-- **Eight classic chord progressions** — pop, rock, doo-wop, folk, minor-key color, jazz ii–V–I, 12-bar blues, and the Canon progression.
-- **Transpose into any major key** — chord names, diagrams, and playback update together.
-- **Practice mode** — adjustable tempo (50–180 BPM), four beats per chord, optional metronome, and highlighted changes as you play along.
-- **Responsive and accessible** — suitable for phones, tablets, and desktops; keyboard-friendly controls; reduced-motion support.
+- Searchable library of 96 chords across 12 roots and multiple chord qualities.
+- Interactive fretboard diagrams showing strings, fret positions and playable voicings.
+- Eight common chord progressions with key transposition and practice mode.
+- Power-chord lessons covering root and fifth, optional octave, muting, palm muting and downstroke technique.
+- Power-chord explorer with low E / A string shapes and two- or three-note variants.
+- Six punk-inspired progression loops including classic I–IV–V, pop-punk, skate-punk, garage, descending hardcore-style and melodic punk.
+- Punk practice player with 80–220 BPM, quarter/eighth-note patterns, metronome and highlighted chord changes.
+- In-browser Web Audio playback; no audio files or server processing required.
+- Responsive layouts for phones, iPads, laptops and desktops.
+- Custom Fretwise app icon for iPad/iPhone Add to Home Screen, browser favicons and a web app manifest.
 
-Fretwise uses standard **E–A–D–G–B–e** tuning. Sounds are generated with the Web Audio API; there are no prerecorded audio samples or external sound files. Diagram shapes use playable open positions where available and movable shapes for other chords.
+## Publish to GitHub Pages
 
-## Publishing
+1. Extract this ZIP.
+2. Upload **all** files and the `icons` folder to the root of your `dreadcaptjames/Fretwise` GitHub repository. Replace matching existing files.
+3. Make sure GitHub Pages is set to publish from `main` / `/ (root)` under **Settings → Pages**.
+4. Open https://dreadcaptjames.github.io/Fretwise/
 
-This is a static website with no build step or backend. GitHub Pages, any static web host, or a local browser can serve the app. On GitHub, select **Settings → Pages → Deploy from a branch → main → /(root)** to publish it. The site will be available on your repository's Pages address once GitHub has published it.
+For iPad or iPhone, open the site in Safari and use **Share → Add to Home Screen**. If the old shortcut still shows the old icon, remove the shortcut and add it again.
 
-## Files
+## Important files
 
-- `index.html` — page structure and accessible controls
-- `styles.css` — responsive appearance
-- `app.js` — chord data, diagrams, transposition, and practice playback
-- `favicon.svg` — app icon
+- `index.html`: site structure and Home Screen metadata.
+- `styles.css`: responsive styling.
+- `app.js`: chord data and interactive practice tools.
+- `site.webmanifest`: web app metadata and icon paths.
+- `apple-touch-icon.png` and other Apple sizes: Apple Home Screen icons.
+- `icons/icon-192.png` and `icons/icon-512.png`: web app icons.
+- `favicon.png`, `favicon.ico` and `favicon.svg`: browser icons and fallback.
 
-## Notes
-
-- Audio begins only after you interact with the page, as required by browser autoplay rules.
-- Progressions are presented relative to a selected **major** key; the minor pop loop begins on its relative minor chord.
-- A synthesized strum is a pitch reference, not a realistic sampled guitar recording.
-
-Made for the simple joy of playing guitar.
-
-## Power chords & punk practice
-
-The **Power chords** tab adds a step-by-step guide to root–fifth shapes, an optional octave, fretting-hand muting, palm muting, and downstroke technique. The interactive fretboard lets you pick all 12 roots on the low E or A string and hear two- or three-note shapes.
-
-Six punk-inspired progressions — classic I–IV–V, pop-punk, skate-punk, garage, descending hardcore-style, and melodic-punk turnaround — can be transposed to all 12 keys. The dedicated practice player supports 80–220 BPM, quarter-note hits or eighth-note downstrokes, a metronome, and highlighted chord changes. Shapes and sound are calculated in-browser; the patterns are original exercises based on common conventions, not exact song transcriptions.
-
-The power chord designation `5` indicates root and perfect fifth without a third: it does not determine major or minor quality. Each progression chord lasts one four-beat bar.
+Fretwise uses standard E–A–D–G–B–e tuning. Its synthesized audio is a practice reference rather than a sampled acoustic guitar.
